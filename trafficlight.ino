@@ -1,59 +1,58 @@
-// Pin konfigurasi untuk setiap jalur
-int merah1 = 2, kuning1 = 3, hijau1 = 4;
-int merah2 = 5, kuning2 = 6, hijau2 = 7;
-int merah3 = 8, kuning3 = 9, hijau3 = 10;
-int merah4 = 11, kuning4 = 12, hijau4 = A0; // Pin 13 diganti ke A0
+// Pin konfigurasi untuk Utara, Timur, Selatan, Barat
+int merahUtara = 2, kuningUtara = 3, hijauUtara = 4;
+int merahTimur = 5, kuningTimur = 6, hijauTimur = 7;
+int merahSelatan = 8, kuningSelatan = 9, hijauSelatan = 10;
+int merahBarat = 11, kuningBarat = 12, hijauBarat = A0;
 
 void setup() {
   // Atur semua pin sebagai output
-  pinMode(merah1, OUTPUT); pinMode(kuning1, OUTPUT); pinMode(hijau1, OUTPUT);
-  pinMode(merah2, OUTPUT); pinMode(kuning2, OUTPUT); pinMode(hijau2, OUTPUT);
-  pinMode(merah3, OUTPUT); pinMode(kuning3, OUTPUT); pinMode(hijau3, OUTPUT);
-  pinMode(merah4, OUTPUT); pinMode(kuning4, OUTPUT); pinMode(hijau4, OUTPUT);
+  pinMode(merahUtara, OUTPUT); pinMode(kuningUtara, OUTPUT); pinMode(hijauUtara, OUTPUT);
+  pinMode(merahTimur, OUTPUT); pinMode(kuningTimur, OUTPUT); pinMode(hijauTimur, OUTPUT);
+  pinMode(merahSelatan, OUTPUT); pinMode(kuningSelatan, OUTPUT); pinMode(hijauSelatan, OUTPUT);
+  pinMode(merahBarat, OUTPUT); pinMode(kuningBarat, OUTPUT); pinMode(hijauBarat, OUTPUT);
 
-  // Matikan semua lampu saat awal
-  matikanSemuaLampu();
+  // Kondisi default Semua lampu merah
+  semuaMerah();
 }
 
 void loop() {
-  // Jalur 1
-  nyalakanLampu(hijau1, merah2, merah3, merah4);
-  delay(3000); // Menyala 3 detik
-  nyalakanLampu(kuning1, merah2, merah3, merah4);
-  delay(1000); // Menyala 1 detik
-
-  // Jalur 2
-  nyalakanLampu(hijau2, merah1, merah3, merah4);
-  delay(3000);
-  nyalakanLampu(kuning2, merah1, merah3, merah4);
-  delay(1000);
-
-  // Jalur 3
-  nyalakanLampu(hijau3, merah1, merah2, merah4);
-  delay(3000);
-  nyalakanLampu(kuning3, merah1, merah2, merah4);
-  delay(1000);
-
-  // Jalur 4
-  nyalakanLampu(hijau4, merah1, merah2, merah3);
-  delay(3000);
-  nyalakanLampu(kuning4, merah1, merah2, merah3);
-  delay(1000);
+  // Sesuai arah jarum jam Utara -> Timur -> Selatan -> Barat
+  aktifkanSimpang(merahUtara, kuningUtara, hijauUtara);
+  aktifkanSimpang(merahTimur, kuningTimur, hijauTimur);
+  aktifkanSimpang(merahSelatan, kuningSelatan, hijauSelatan);
+  aktifkanSimpang(merahBarat, kuningBarat, hijauBarat);
 }
 
-// Fungsi untuk menyalakan lampu aktif dan menahan jalur lain
-void nyalakanLampu(int pinAktif, int stop1, int stop2, int stop3) {
-  matikanSemuaLampu();
-  digitalWrite(pinAktif, HIGH);
-  digitalWrite(stop1, HIGH);
-  digitalWrite(stop2, HIGH);
-  digitalWrite(stop3, HIGH);
+void semuaMerah() {
+  // Nyalakan semua lampu merah, matikan kuning dan hijau
+  digitalWrite(merahUtara, HIGH); digitalWrite(kuningUtara, LOW); digitalWrite(hijauUtara, LOW);
+  digitalWrite(merahTimur, HIGH); digitalWrite(kuningTimur, LOW); digitalWrite(hijauTimur, LOW);
+  digitalWrite(merahSelatan, HIGH); digitalWrite(kuningSelatan, LOW); digitalWrite(hijauSelatan, LOW);
+  digitalWrite(merahBarat, HIGH); digitalWrite(kuningBarat, LOW); digitalWrite(hijauBarat, LOW);
 }
 
-// Fungsi untuk mematikan semua lampu
-void matikanSemuaLampu() {
-  digitalWrite(merah1, LOW); digitalWrite(kuning1, LOW); digitalWrite(hijau1, LOW);
-  digitalWrite(merah2, LOW); digitalWrite(kuning2, LOW); digitalWrite(hijau2, LOW);
-  digitalWrite(merah3, LOW); digitalWrite(kuning3, LOW); digitalWrite(hijau3, LOW);
-  digitalWrite(merah4, LOW); digitalWrite(kuning4, LOW); digitalWrite(hijau4, LOW);
+void aktifkanSimpang(int pinMerah, int pinKuning, int pinHijau) {
+  // Matikan lampu merah di simpang ini, nyalakan lampu hijau
+  digitalWrite(pinMerah, LOW);
+  digitalWrite(pinHijau, HIGH);
+  delay(5000); // Hijau menyala 5 detik
+
+  // Matikan hijau, mulai fase kuning
+  digitalWrite(pinHijau, LOW);
+
+  // Efek kuning kedip 3 kali
+  for(int i = 0; i < 3; i++) {
+    digitalWrite(pinKuning, HIGH);
+    delay(300); // Nyala sementara
+    digitalWrite(pinKuning, LOW);
+    delay(300); // Mati sementara
+  }
+
+  // Kuning menyala selama 2 detik penuh
+  digitalWrite(pinKuning, HIGH);
+  delay(2000);
+  digitalWrite(pinKuning, LOW);
+
+  // Kembali ke merah
+  digitalWrite(pinMerah, HIGH);
 }
