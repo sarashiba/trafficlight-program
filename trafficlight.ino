@@ -1,8 +1,8 @@
 // Pin konfigurasi untuk Utara, Timur, Selatan, Barat
-int merahUtara = 2, kuningUtara = 3, hijauUtara = 4;
-int merahTimur = 5, kuningTimur = 6, hijauTimur = 7;
-int merahSelatan = 8, kuningSelatan = 9, hijauSelatan = 10;
-int merahBarat = 11, kuningBarat = 12, hijauBarat = A0;
+int merahUtara = 11, kuningUtara = 12, hijauUtara = A0;
+int merahTimur = 2, kuningTimur = 3, hijauTimur = 4;
+int merahSelatan = 5, kuningSelatan = 6, hijauSelatan = 7;
+int merahBarat = 8, kuningBarat = 9, hijauBarat = 10;
 
 void setup() {
   // Atur semua pin sebagai output
